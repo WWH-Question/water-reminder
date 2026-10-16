@@ -7,16 +7,21 @@ import com.waterreminder.entity.mysql.UserInfo;
 import com.waterreminder.repository.mysql.UserInfoRepository;
 import com.waterreminder.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
 
-    private final UserInfoRepository userInfoRepository;
-    private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
+    private UserInfoRepository userInfoRepository;
+    private JwtService jwtService;
+    private PasswordEncoder passwordEncoder;
 
+    // CGLIB 事务代理需要无参构造
+    public UserService() {}
+
+    @Autowired
     public UserService(UserInfoRepository userInfoRepository,
                        JwtService jwtService,
                        PasswordEncoder passwordEncoder) {

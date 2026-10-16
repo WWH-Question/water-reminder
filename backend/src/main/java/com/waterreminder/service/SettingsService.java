@@ -4,15 +4,20 @@ import com.waterreminder.dto.SettingsDTO;
 import com.waterreminder.entity.mysql.UserInfo;
 import com.waterreminder.repository.mysql.UserInfoRepository;
 import com.waterreminder.security.CurrentUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SettingsService {
 
-    private final UserInfoRepository userInfoRepository;
-    private final CurrentUserService currentUserService;
+    private UserInfoRepository userInfoRepository;
+    private CurrentUserService currentUserService;
 
+    // CGLIB 事务代理需要无参构造
+    public SettingsService() {}
+
+    @Autowired
     public SettingsService(UserInfoRepository userInfoRepository,
                            CurrentUserService currentUserService) {
         this.userInfoRepository = userInfoRepository;

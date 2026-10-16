@@ -4,7 +4,7 @@
 
 ## ✨ 功能特性
 
-- 🔐 **用户注册 / 登录**：JWT 认证，账号数据存 MySQL
+- 🔐 **用户注册 / 登录**：JWT 认证，账号数据存本地 H2
 - 🎯 **智能饮水目标**：每日需水量 = 体重 × 系数（可自定义系数）
 - 🕐 **双模式提醒**：根据上下班时间自动切换「工作模式」（每 30 分钟）与「日常模式」（30 / 60 分钟）
 - 📊 **进度环**：实时展示今日已喝 / 目标 / 剩余
@@ -19,7 +19,7 @@
 | 桌面壳 | Electron 33 |
 | 前端 | Vue 3 + TypeScript + Vite + vue-router + axios |
 | 后端 | Spring Boot 3.2.1 + Spring Security + JWT (jjwt 0.12) |
-| 数据库 | MySQL（用户信息）+ H2（喝水记录）|
+| 数据库 | H2（本地文件数据库，用户信息 + 喝水记录，自包含）|
 | 构建 | Maven + electron-builder（NSIS 安装包）|
 
 ## 📁 项目结构
@@ -28,9 +28,9 @@
 waterdrink/
 ├── backend/          # Spring Boot 后端（Java 17）
 │   └── src/main/java/com/waterreminder/
-│       ├── config/       # 双数据源配置（MySQL + H2）
+│       ├── config/       # 双数据源配置（均指向本地 H2）
 │       ├── controller/   # Auth / Record / Settings / Stats / Admin
-│       ├── entity/       # mysql.UserInfo / h2.DrinkRecord
+│       ├── entity/       # UserInfo（用户）/ DrinkRecord（喝水记录）
 │       ├── security/     # JWT 认证
 │       └── service/      # 饮水量计算 / 提醒逻辑
 ├── frontend/         # Vue 3 前端
@@ -49,13 +49,11 @@ waterdrink/
 
 - JDK 17、Maven
 - Node.js 18+（含 npm）
-- 本地 MySQL 8（创建数据库 `water_reminder` 和用户 `waterapp`）
 
 ### 后端
 
 ```bash
 cd backend
-# 需要设置环境变量（见下方「环境变量」）
 mvn spring-boot:run
 # 默认运行在 http://localhost:8080
 ```
@@ -90,17 +88,15 @@ npm run package     # 生成 NSIS 安装包到 release/
 
 ## 🔑 环境变量
 
-`application.yml` 中的敏感信息已改为环境变量占位符，运行前需要注入：
+`application.yml` 中的敏感信息已改为环境变量占位符，`JWT_SECRET` 已有可用默认值，本地开发可直接运行；如需自定义：
 
 | 变量 | 说明 |
 |------|------|
-| `MYSQL_PASSWORD` | 本地 MySQL 用户 `waterapp` 的密码 |
 | `JWT_SECRET` | JWT 签名密钥（base64 编码，**至少 32 字节**）|
 
 Windows 示例（PowerShell）：
 
 ```powershell
-$env:MYSQL_PASSWORD="你的密码"
 $env:JWT_SECRET="base64编码的密钥"
 ```
 
@@ -108,5 +104,5 @@ $env:JWT_SECRET="base64编码的密钥"
 
 | 数据 | 存储 | 位置 |
 |------|------|------|
-| 用户信息（用户名 / 密码哈希 / 身高 / 体重 / 上下班时间 / 睡觉时间）| MySQL | 表 `user_info` |
+| 用户信息（用户名 / 密码哈希 / 身高 / 体重 / 上下班时间 / 睡觉时间）| H2 文件数据库 | `./data/water_reminder_user` |
 | 喝水记录 | H2 文件数据库 | `./data/water_reminder_h2` |

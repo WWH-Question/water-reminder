@@ -5,6 +5,7 @@ import com.waterreminder.entity.h2.DrinkRecord;
 import com.waterreminder.entity.mysql.UserInfo;
 import com.waterreminder.repository.h2.DrinkRecordRepository;
 import com.waterreminder.security.CurrentUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +18,15 @@ import java.util.stream.Collectors;
 @Service
 public class RecordService {
 
-    private final DrinkRecordRepository recordRepository;
-    private final CalculatorService calculatorService;
-    private final SettingsService settingsService;
-    private final CurrentUserService currentUserService;
+    private DrinkRecordRepository recordRepository;
+    private CalculatorService calculatorService;
+    private SettingsService settingsService;
+    private CurrentUserService currentUserService;
 
+    // CGLIB 事务代理需要无参构造
+    public RecordService() {}
+
+    @Autowired
     public RecordService(DrinkRecordRepository recordRepository,
                          CalculatorService calculatorService,
                          SettingsService settingsService,

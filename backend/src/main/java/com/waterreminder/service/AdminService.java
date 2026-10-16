@@ -3,6 +3,7 @@ package com.waterreminder.service;
 import com.waterreminder.dto.AdminUserDTO;
 import com.waterreminder.entity.mysql.UserInfo;
 import com.waterreminder.repository.mysql.UserInfoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,8 +13,12 @@ import java.util.stream.Collectors;
 @Service
 public class AdminService {
 
-    private final UserInfoRepository userInfoRepository;
+    private UserInfoRepository userInfoRepository;
 
+    // CGLIB 事务代理需要无参构造
+    public AdminService() {}
+
+    @Autowired
     public AdminService(UserInfoRepository userInfoRepository) {
         this.userInfoRepository = userInfoRepository;
     }
