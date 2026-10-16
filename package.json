@@ -1,0 +1,53 @@
+{
+  "name": "water-reminder",
+  "version": "1.0.0",
+  "description": "💧 喝水提醒桌面应用",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && mvn package -DskipTests",
+    "build:jre": "bash scripts/build-jre.sh",
+    "build:all": "npm run build:frontend && npm run build:backend && npm run build:jre",
+    "package": "npm run build:all && electron-builder --win nsis",
+    "dev:electron": "set ELECTRON_DEV=1 && electron .",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.waterreminder.app",
+    "productName": "Water Reminder",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "!node_modules"
+    ],
+    "extraResources": [
+      {
+        "from": "jre",
+        "to": "jre",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "backend/target/water-reminder-1.0.0.jar",
+        "to": "water-reminder.jar"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": null,
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Water Reminder Setup ${version}.exe"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}

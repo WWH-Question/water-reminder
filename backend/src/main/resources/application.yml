@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: water-reminder
+
+  datasource:
+    mysql:
+      url: jdbc:mysql://localhost:3306/water_reminder?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: waterapp
+      # 本地开发时通过环境变量注入：MYSQL_PASSWORD=你的密码
+      password: "${MYSQL_PASSWORD:change_me}"
+      hikari:
+        maximum-pool-size: 5
+        minimum-idle: 2
+    h2:
+      url: jdbc:h2:file:./data/water_reminder_h2;MODE=MySQL;DB_CLOSE_DELAY=-1
+      driver-class-name: org.h2.Driver
+      username: sa
+      password:
+
+  h2:
+    console:
+      enabled: false
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+jwt:
+  # 本地开发时通过环境变量注入：JWT_SECRET=<base64 编码，至少 32 字节>
+  secret: "${JWT_SECRET:Y2hhbmdlLW1lLWp3dC1zZWNyZXQtcGxhY2Vob2xkZXItZm9yLWxvY2FsLWRldi1vbmx5LTEyMzQ1Njc4OTA=}"
+  expiration-ms: 86400000
+
+logging:
+  level:
+    com.waterreminder: INFO

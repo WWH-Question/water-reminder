@@ -1,0 +1,36 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: water-reminder
+
+  # ========== MySQL (主数据源) - User + Settings ==========
+  datasource:
+    mysql:
+      url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB:water_reminder}?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: ${MYSQL_USER:waterapp}
+      password: ${MYSQL_PASSWORD}
+      hikari:
+        maximum-pool-size: 5
+        minimum-idle: 2
+
+    # ========== H2 (次数据源) - DrinkRecord ==========
+    h2:
+      url: jdbc:h2:file:/opt/water-reminder/data/water_reminder_h2;MODE=MySQL;DB_CLOSE_DELAY=-1
+      driver-class-name: org.h2.Driver
+      username: sa
+      password:
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+logging:
+  level:
+    com.waterreminder: INFO
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration-ms: ${JWT_EXPIRATION:86400000}

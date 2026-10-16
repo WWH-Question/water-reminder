@@ -1,0 +1,25 @@
+# Electron
+node_modules/
+release/
+jre/
+
+# Backend
+backend/target/
+backend/data/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# IDE
+.idea/
+*.iml
+
+# Data & archives
+data/
+*.zip
+*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
